@@ -1,21 +1,21 @@
 #Import neccesary libraries
 
-from selenium import webdriver
-import pyautogui
-from bs4 import BeautifulSoup
-import threading
-import time
-import pandas as pd
+from selenium import webdriver              # driver to control chrome browser
+import pyautogui                            
+from bs4 import BeautifulSoup          # to parse the html code
+import threading                       # to do multi threding
+import time 
+import pandas as pd                   # to store data in csv file
 
 
 #enter the filename
 
-print("Enter the filename")
+print("Enter the filename")            # filename to store data
 filename=str(input())
 
 
 #intiate the chrome webdriver instance
-browser=webdriver.Chrome()
+browser=webdriver.Chrome()           # chrome instance 
 record=[]
 e=[]
 def Selenium_extractor():
@@ -26,7 +26,7 @@ def Selenium_extractor():
         a[i].click()
         time.sleep(2)
         source=browser.page_source
-#Beautiful soup for scraping the html source
+                                                          #Beautiful soup for scraping the html source
         soup=BeautifulSoup(source,'html.parser')
         try:
             Name_Html=soup.findAll('div',{"class":"SPZz6b"})
@@ -52,7 +52,7 @@ def Selenium_extractor():
                     website="Not available"
                 #print(website)
                 record.append((name,phone,address,website))
-                df=pd.DataFrame(record,columns=['Name','Phone number','Address','Website'])
+                df=pd.DataFrame(record,columns=['Name','Phone number','Address','Website'])  # writing data to the file
                 df.to_csv(filename + '.csv',index=False,encoding='utf-8')
 
         except:
@@ -63,7 +63,7 @@ def Selenium_extractor():
         
     try:
         time.sleep(1)            
-        next_button=browser.find_element_by_id("pnnext")
+        next_button=browser.find_element_by_id("pnnext")                  # clicking the next button
         next_button.click()
         browser.implicitly_wait(2)
         time.sleep(2)
@@ -74,6 +74,6 @@ def Selenium_extractor():
 
 print("Enter the link of the page")
 link=input()
-browser.get(str(link))
-time.sleep(10)
+browser.get(str(link)) 
+time.sleep(10)                                             # pausing the program for 10 secs
 Selenium_extractor()
